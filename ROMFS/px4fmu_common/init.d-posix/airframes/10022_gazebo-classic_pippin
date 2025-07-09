@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# @name pippin
+# @type Hexarotor x coaxial front
+# @class Copter
+# @maintainer Joshua Taylor <joshua.taylor@u.nus.edu>
+#
+. ${R}etc/init.d/rc.mc_defaults
+
+
+param set-default CA_ROTOR_COUNT 6
+
+# front right top - 0
+# back left - 1
+# front left - 2
+# back right - 3
+# front right bottom - 4
+# front left bottom - 5
+
+
+param set-default CA_ROTOR0_PX 0.13
+param set-default CA_ROTOR0_PY 0.22
+param set-default CA_ROTOR0_PZ 0.023
+param set-default CA_ROTOR0_KM 0.05
+
+param set-default CA_ROTOR1_PX -0.13
+param set-default CA_ROTOR1_PY -0.22
+param set-default CA_ROTOR1_PZ 0.023
+param set-default CA_ROTOR1_KM 0.05
+
+param set-default CA_ROTOR2_PX 0.13
+param set-default CA_ROTOR2_PY -0.22
+param set-default CA_ROTOR2_PZ 0.023
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.13
+param set-default CA_ROTOR3_PY 0.22
+param set-default CA_ROTOR3_PZ 0.023
+param set-default CA_ROTOR3_KM -0.05
+
+param set-default CA_ROTOR4_PX 0.13
+param set-default CA_ROTOR4_PY 0.22
+param set-default CA_ROTOR4_PZ -0.007
+param set-default CA_ROTOR4_KM -0.05
+
+param set-default CA_ROTOR5_PX 0.13
+param set-default CA_ROTOR5_PY -0.22
+param set-default CA_ROTOR5_PZ -0.007
+param set-default CA_ROTOR5_KM 0.05
+
+param set-default PWM_MAIN_FUNC1 101
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+param set-default PWM_MAIN_FUNC5 105
+param set-default PWM_MAIN_FUNC6 106
+
+
+# param set-default PWM_AUX_FUNC1 0
+# param set-default PWM_AUX_FUNC2 0
+
+
+param set-default MAV_TYPE 13 # MAV_TYPE_HEXAROTOR
+
+

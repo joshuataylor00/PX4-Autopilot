@@ -34,7 +34,8 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
-#include <uORB/topics/debug_value.h>
+// #include <uORB/topics/debug_value.h>
+#include <uORB/topics/vehicle_tiltrotor_angle_setpoint.h>
 
 class MavlinkStreamDebug : public MavlinkStream
 {
@@ -55,17 +56,23 @@ public:
 private:
 	explicit MavlinkStreamDebug(Mavlink *mavlink) : MavlinkStream(mavlink) {}
 
-	uORB::Subscription _debug_value_sub{ORB_ID(debug_value)};
+
+	// uORB::Subscription _debug_value_sub{ORB_ID(debug_value)};
+	uORB::Subscription _debug_value_sub{ORB_ID(vehicle_tiltrotor_angle_setpoint)};
 
 	bool send() override
 	{
-		debug_value_s debug;
+		// debug_value_s debug;
+		vehicle_tiltrotor_angle_setpoint_s debug;
 
 		if (_debug_value_sub.update(&debug)) {
 			mavlink_debug_t msg{};
+			// msg.time_boot_ms = debug.timestamp / 1000ULL;
+			// msg.ind = debug.ind;
+			// msg.value = debug.value;
 			msg.time_boot_ms = debug.timestamp / 1000ULL;
-			msg.ind = debug.ind;
-			msg.value = debug.value;
+
+			msg.value = debug.tiltrotor_angle;
 
 			mavlink_msg_debug_send_struct(_mavlink->get_channel(), &msg);
 
