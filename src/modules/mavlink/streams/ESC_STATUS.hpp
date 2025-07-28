@@ -59,6 +59,85 @@ private:
 	uORB::Subscription _esc_status_sub{ORB_ID(esc_status)};
 	uint8_t _number_of_batches{0};
 
+	// bool send() override
+	// {
+	// 	static constexpr uint8_t batch_size = MAVLINK_MSG_ESC_STATUS_FIELD_RPM_LEN;
+	// 	esc_status_s esc_status;
+
+	// 	if (_esc_status_sub.update(&esc_status)) {
+	// 		mavlink_esc_status_t msg{};
+
+	// 		msg.time_usec = esc_status.timestamp;
+
+	// 		// Ceil value of integer division. For 1-4 esc => 1 batch, 5-8 esc => 2 batches etc
+	// 		_number_of_batches = ceilf((float)esc_status.esc_count / batch_size);
+
+	// 		for (int batch_number = 0; batch_number < _number_of_batches; batch_number++) {
+	// 			msg.index = batch_number * batch_size;
+
+	// 			for (int esc_index = 0; esc_index < batch_size ; esc_index++) {
+	// 				msg.rpm[esc_index] = esc_status.esc[esc_index].esc_rpm;
+	// 				msg.voltage[esc_index] = esc_status.esc[esc_index].esc_voltage;
+	// 				msg.current[esc_index] = esc_status.esc[esc_index].esc_current;
+	// 			}
+
+	// 			mavlink_msg_esc_status_send_struct(_mavlink->get_channel(), &msg);
+	// 		}
+
+	// 		return true;
+	// 	}
+
+	// 	return false;
+	// }
+
+	//##########################
+
+	// bool send() override
+	// {
+	// 	// The MAVLink message can hold data for up to MAVLINK_MSG_ESC_STATUS_FIELD_RPM_LEN ESCs.
+	// 	static constexpr uint8_t batch_size = MAVLINK_MSG_ESC_STATUS_FIELD_RPM_LEN;
+	// 	esc_status_s esc_status;
+
+	// 	if (_esc_status_sub.update(&esc_status)) {
+
+	// 		_number_of_batches = ceilf((float)esc_status.esc_count / batch_size);
+
+	// 		for (uint8_t batch_number = 0; batch_number < _number_of_batches; batch_number++) {
+
+	// 			mavlink_esc_status_t msg{};
+	// 			msg.time_usec = esc_status.timestamp;
+
+	// 			msg.index = batch_number * batch_size;
+
+	// 			for (uint8_t i = 0; i < batch_size; i++) {
+
+	// 				const uint8_t source_esc_index = msg.index + i;
+
+	// 				if (source_esc_index < esc_status.esc_count) {
+	// 				msg.rpm[i] = esc_status.esc[source_esc_index].esc_rpm;
+	// 				msg.voltage[i] = esc_status.esc[source_esc_index].esc_voltage;
+	// 				msg.current[i] = esc_status.esc[source_esc_index].esc_current;
+
+	// 				} else {
+	// 				msg.rpm[i] = 0;
+	// 				msg.voltage[i] = 0.0f;
+	// 				msg.current[i] = 0.0f;
+	// 				}
+	// 			}
+
+	// 			mavlink_msg_esc_status_send_struct(_mavlink->get_channel(), &msg);
+	// 		}
+
+	// 		return true;
+	// 	}
+
+	// 	// If no new data, ensure the batch count is zero for the get_size() function
+	// 	_number_of_batches = 0;
+	// 	return false;
+	// }
+
+// ##################
+
 	bool send() override
 	{
 		static constexpr uint8_t batch_size = MAVLINK_MSG_ESC_STATUS_FIELD_RPM_LEN;
@@ -75,10 +154,11 @@ private:
 			for (int batch_number = 0; batch_number < _number_of_batches; batch_number++) {
 				msg.index = batch_number * batch_size;
 
-				for (int esc_index = 0; esc_index < batch_size ; esc_index++) {
-					msg.rpm[esc_index] = esc_status.esc[esc_index].esc_rpm;
-					msg.voltage[esc_index] = esc_status.esc[esc_index].esc_voltage;
-					msg.current[esc_index] = esc_status.esc[esc_index].esc_current;
+				for (int esc_index = 0; esc_index < batch_size
+				&& msg.index + esc_index < esc_status_s::CONNECTED_ESC_MAX; esc_index++) {
+					msg.rpm[esc_index] = esc_status.esc[msg.index + esc_index].esc_rpm;
+					msg.voltage[esc_index] = esc_status.esc[msg.index + esc_index].esc_voltage;
+					msg.current[esc_index] = esc_status.esc[msg.index + esc_index].esc_current;
 				}
 
 				mavlink_msg_esc_status_send_struct(_mavlink->get_channel(), &msg);
