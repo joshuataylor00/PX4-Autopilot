@@ -75,6 +75,10 @@ mavlink stream -d /dev/ttyS6 -s GPS_STATUS -r 0
 mavlink stream -d /dev/ttyS6 -s DEBUG -r 200
 mavlink stream -d /dev/ttyS6 -s SERVO_OUTPUT_RAW_1 -r 200
 mavlink stream -d /dev/ttyS6 -s ESC_STATUS -r 200
+mavlink stream -d /dev/ttyS6 -s BATTERY_STATUS -r 200
+mavlink stream -d /dev/ttyS6 -s HEARTBEAT -r 20
+
+
 
 
 
