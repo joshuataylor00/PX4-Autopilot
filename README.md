@@ -1,3 +1,25 @@
+# PX4 for Tiltrotor V2
+
+This is the PX4 firmware running on the **Tiltrotor V2** drone ("pippin"). It is PX4 v1.14.4 with the tiltrotor modifications:
+- tiltrotor angle computation in `mc_pos_control`;
+- the pitch setpoint taken from the offboard computer via MAVLink `DEBUG`;
+- the `TILTROTOR_ANGLE`/`DEBUG` and extended `ESC_STATUS` streams;
+- the `6003_pippin` airframe.
+
+| | |
+|---|---|
+| Board | Pixhawk 6X (`px4_fmu-v6x_default`) |
+| Airframe | `SYS_AUTOSTART 6003` (`ROMFS/px4fmu_common/init.d/airframes/6003_pippin`) |
+| Flashed build | git hash `7e6fd7b`, branch `my-v1.14.4-mods`, plus the airframe change committed here as `045e822` |
+
+Verified on 2026-10-27 by reading `ver all` and the airframe file back from the flight controller.
+
+Build: `git submodule update --init --recursive && make px4_fmu-v6x_default`
+
+**Do not flash this to the drone, or change its parameters, without checking first. The drone is in a known working state.**
+
+---
+
 # PX4 Drone Autopilot
 
 [![Releases](https://img.shields.io/github/release/PX4/PX4-Autopilot.svg)](https://github.com/PX4/PX4-Autopilot/releases) [![DOI](https://zenodo.org/badge/22634/PX4/PX4-Autopilot.svg)](https://zenodo.org/badge/latestdoi/22634/PX4/PX4-Autopilot)
